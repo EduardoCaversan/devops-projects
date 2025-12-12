@@ -1,0 +1,15 @@
+name: Docker Deploy
+on:
+  push:
+    branches: [docker-deploy]
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - run: docker build -t ${{ secrets.DOCKERHUB_USER }}/node-k8s-app:latest ./app
+      - run: docker push ${{ secrets.DOCKERHUB_USER }}/node-k8s-app:latest
